@@ -1,12 +1,14 @@
 const cardsRouter = require('express').Router();
 const fsPromises = require('fs').promises;
+const path = require('path');
 
 cardsRouter.get('/cards', (req, res) => {
+  const filepath = path.join(__dirname, '../data/cards.json');
   fsPromises
-    .readFile('data/cards.json', 'utf-8')
+    .readFile(filepath, { enconding: 'utf8' })
     .then((data) => {
-      data = JSON.parse(data);
-      res.status(200).json(data);
+      const information = JSON.parse(data);
+      res.status(200).json(information);
     })
     .catch((err) => {
       res
