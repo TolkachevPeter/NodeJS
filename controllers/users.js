@@ -1,15 +1,13 @@
 const fsPromises = require('fs').promises;
-const path = require('path');
+const User = require('../models/user');
 
 module.exports.getAllUsers = (req, res) => {
-  const filepath = path.join(__dirname, '../data/users.json');
-  fsPromises.readFile(filepath, { enconding: 'utf8' })
-    .then((data) => {
-      const information = JSON.parse(data);
-      res.status(200).json(information);
+  User.find({})
+    .then((users) => {
+      res.status(200).send({ data: users });
     })
     .catch((err) => {
-      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+      res.status(500).send({ message: err.message });
     });
 };
 
