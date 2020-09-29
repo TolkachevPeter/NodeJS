@@ -24,7 +24,7 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     required: true,
-    validate: linkValidor,
+    // validate: linkValidor,
   },
 });
 
