@@ -1,31 +1,30 @@
 const usersRouter = require('express').Router();
 const fsPromises = require('fs').promises;
-const users = require('../data/users.json');
+const path = require('path');
 
 usersRouter.get('/users', (req, res) => {
-  fsPromises.readFile('data/users.json', 'utf-8')
-  .then(data => {
-    data = JSON.parse(data);
-    res.status(200).json(data)
-  })
-  .catch(err => {
-    res.status(404).json({ message : "Нет пользователя с таким id" })
-  })
-})
+  const filepath = path.join(__dirname, '../data/users.json');
+  fsPromises.readFile(filepath, { enconding: 'utf8' })
+    .then((data) => {
+      const information = JSON.parse(data);
+      res.status(200).json(information);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+    });
+});
 
-usersRouter.get('/users/:id', (req, res) =>{
-
-
-
-  fsPromises.readFile('data/users.json', 'utf-8')
-  .then(data => {
-    const user = users.find(item => item._id == req.params.id);
-    const { name, about, _id } = user;
-    res.status(200).send(`Пользователь с именем ${name}, о себе: ${about}, id: ${_id}.`);
-  })
-  .catch(err => {
-    res.status(404).json({ message: "Нет пользователя с таким id" })
-  })
+usersRouter.get('/users/:id', (req, res) => {
+  const filepath = path.join(__dirname, '../data/users.json');
+  fsPromises.readFile(filepath, { enconding: 'utf8' })
+    .then((data) => {
+      const information = JSON.parse(data);
+      const user = information.find((item) => item._id === req.params.id);
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+    });
 });
 
 module.exports = usersRouter;
