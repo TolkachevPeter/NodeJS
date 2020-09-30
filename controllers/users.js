@@ -27,3 +27,14 @@ module.exports.getUser = (req, res) => {
       res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
     });
 };
+
+module.exports.patchUser = (req, res) => {
+  const { name, about, avatar } = req.body;
+  User.findByIdAndUpdate(req.params.id, { name, about, avatar })
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+    });
+};
