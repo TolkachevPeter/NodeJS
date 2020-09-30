@@ -1,4 +1,3 @@
-const fsPromises = require('fs').promises;
 const User = require('../models/user');
 
 module.exports.getAllUsers = (req, res) => {
@@ -19,15 +18,12 @@ module.exports.createUser = (req, res) => {
     .catch((err) => res.status(500).send({ message: err.message }));
 };
 
-// module.exports.getUser = (req, res) => {
-//   const filepath = path.join(__dirname, '../data/users.json');
-//   fsPromises.readFile(filepath, { enconding: 'utf8' })
-//     .then((data) => {
-//       const information = JSON.parse(data);
-//       const user = information.find((item) => item._id === req.params.id);
-//       res.status(200).json(user);
-//     })
-//     .catch((err) => {
-//       res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
-//     });
-// };
+module.exports.getUser = (req, res) => {
+  User.findById(req.params.id)
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+    });
+};
