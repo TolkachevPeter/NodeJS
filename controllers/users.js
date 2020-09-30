@@ -30,7 +30,7 @@ module.exports.getUser = (req, res) => {
 
 module.exports.patchUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.params.id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about })
     .then((user) => {
       res.status(200).send(user);
     })
@@ -41,7 +41,7 @@ module.exports.patchUser = (req, res) => {
 
 module.exports.patchUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.params.id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar })
     .then((user) => {
       res.status(200).send(user);
     })
