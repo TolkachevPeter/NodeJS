@@ -29,8 +29,19 @@ module.exports.getUser = (req, res) => {
 };
 
 module.exports.patchUser = (req, res) => {
-  const { name, about, avatar } = req.body;
-  User.findByIdAndUpdate(req.params.id, { name, about, avatar })
+  const { name, about } = req.body;
+  User.findByIdAndUpdate(req.params.id, { name, about })
+    .then((user) => {
+      res.status(200).send(user);
+    })
+    .catch((err) => {
+      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+    });
+};
+
+module.exports.patchUserAvatar = (req, res) => {
+  const { avatar } = req.body;
+  User.findByIdAndUpdate(req.params.id, { avatar })
     .then((user) => {
       res.status(200).send(user);
     })
