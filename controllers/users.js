@@ -35,7 +35,7 @@ module.exports.getUser = (req, res) => {
 
 module.exports.patchUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
     .then((user) => {
       res.status(200).send(user);
     })
