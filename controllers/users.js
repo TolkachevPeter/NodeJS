@@ -51,7 +51,7 @@ module.exports.patchUser = (req, res) => {
 
 module.exports.patchUserAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
     .then((user) => {
       res.status(200).send(user);
     })
