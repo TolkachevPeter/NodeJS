@@ -27,7 +27,6 @@ app.use((req, res, next) => {
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
 
-
 app.listen(PORT, () => {
   console.log('Ссылка на сервер:');
   console.log(BASE_PATH);
