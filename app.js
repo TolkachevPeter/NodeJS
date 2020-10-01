@@ -17,8 +17,6 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
   useFindAndModify: false,
 });
 
-app.use('/', usersRouter);
-app.use('/', cardsRouter);
 app.use((req, res, next) => {
   req.user = {
     _id: '5f73641169850214d2a2ffb0',
@@ -26,6 +24,9 @@ app.use((req, res, next) => {
 
   next();
 });
+app.use('/', usersRouter);
+app.use('/', cardsRouter);
+
 
 app.listen(PORT, () => {
   console.log('Ссылка на сервер:');
