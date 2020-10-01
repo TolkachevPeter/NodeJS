@@ -26,6 +26,11 @@ module.exports.deleteCardById = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
+      console.error('err = ', err.message);
+      if (err.name === 'DocumentNotFoundError') {
+        res.status(404).json({ message: 'Карточка не найдена' });
+      }
+
       res.status(500).json({ message: `Нет карточки с таким id ${err}` });
     });
 };
@@ -40,6 +45,11 @@ module.exports.likeCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
+      console.error('err = ', err.message);
+      if (err.name === 'DocumentNotFoundError') {
+        res.status(404).json({ message: 'Карточка не найдена' });
+      }
+
       res.status(500).json({ message: `Нет карточки с таким id ${err}` });
     });
 };
@@ -54,6 +64,11 @@ module.exports.dislikeCard = (req, res) => {
       res.status(200).send(card);
     })
     .catch((err) => {
+      console.error('err = ', err.message);
+      if (err.name === 'DocumentNotFoundError') {
+        res.status(404).json({ message: 'Карточка не найдена' });
+      }
+
       res.status(500).json({ message: `Нет карточки с таким id ${err}` });
     });
 };
