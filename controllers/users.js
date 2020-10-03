@@ -46,12 +46,11 @@ module.exports.patchUser = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      console.error('err = ', err.message);
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).json({ message: 'Пользлватель не найдена' });
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: err.message });
+        return;
       }
-
-      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+      res.status(500).send({ message: 'Ошибка на сервере' });
     });
 };
 
@@ -62,11 +61,10 @@ module.exports.patchUserAvatar = (req, res) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      console.error('err = ', err.message);
-      if (err.name === 'DocumentNotFoundError') {
-        res.status(404).json({ message: 'Пользлватель не найдена' });
+      if (err.name === 'ValidationError') {
+        res.status(400).send({ message: err.message });
+        return;
       }
-
-      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+      res.status(500).send({ message: 'Ошибка на сервере' });
     });
 };
