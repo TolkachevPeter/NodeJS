@@ -26,16 +26,17 @@ module.exports.createUser = (req, res) => {
 
 module.exports.getUser = (req, res) => {
   User.findById(req.params.id)
+    .orFail()
     .then((user) => {
       res.status(200).send(user);
     })
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        res.status(404).json({ message: 'Пользлватель не найдена' });
+        res.status(404).json({ message: 'Пользлватель не найден' });
       }
 
-      res.status(500).json({ message: `Нет пользователя с таким id ${err}` });
+      res.status(500).json({ message: 'Ошибка на сервере' });
     });
 };
 

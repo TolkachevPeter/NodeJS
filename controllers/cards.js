@@ -28,6 +28,7 @@ module.exports.createCard = (req, res) => {
 
 module.exports.deleteCardById = (req, res) => {
   Card.findOneAndRemove({ _id: req.params.id })
+    .orFail()
     .then((card) => {
       res.status(200).send(card);
     })
@@ -37,7 +38,7 @@ module.exports.deleteCardById = (req, res) => {
         res.status(404).json({ message: 'Карточка не найдена' });
       }
 
-      res.status(500).json({ message: `Нет карточки с таким id ${err}` });
+      res.status(500).json({ message: 'Ошибка на сервере' });
     });
 };
 
@@ -47,6 +48,7 @@ module.exports.likeCard = (req, res) => {
     { $addToSet: { likes: req.user._id } }, // добавить _id в массив, если его там нет
     { new: true },
   )
+    .orFail()
     .then((card) => {
       res.status(200).send(card);
     })
@@ -56,7 +58,7 @@ module.exports.likeCard = (req, res) => {
         res.status(404).json({ message: 'Карточка не найдена' });
       }
 
-      res.status(500).json({ message: `Нет карточки с таким id ${err}` });
+      res.status(500).json({ message: 'Ошибка на сервере' });
     });
 };
 
@@ -66,6 +68,7 @@ module.exports.dislikeCard = (req, res) => {
     { $pull: { likes: req.user._id } }, // убрать _id из массива
     { new: true },
   )
+    .orFail()
     .then((card) => {
       res.status(200).send(card);
     })
@@ -75,6 +78,6 @@ module.exports.dislikeCard = (req, res) => {
         res.status(404).json({ message: 'Карточка не найдена' });
       }
 
-      res.status(500).json({ message: `Нет карточки с таким id ${err}` });
+      res.status(500).json({ message: 'Ошибка на сервере' });
     });
 };
