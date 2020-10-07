@@ -1,5 +1,6 @@
-const User = require('../models/user');
 const bcryptjs = require('bcryptjs');
+const User = require('../models/user');
+
 
 module.exports.getAllUsers = (req, res) => {
   User.find({})
@@ -12,16 +13,42 @@ module.exports.getAllUsers = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar, email, password } = req.body;
+  const { name, about, avatar, email } = req.body;
+  bcryptjs.hash(req.body.password, 10)
+    .then(hash => User.create({
+      name,
+      about,
+      avatar,
+      email,
+      password: hash,
+    })
+      .then((user) => res.status(201).send({ data: user }))
+      .catch((err) => {
+        if (err.name === 'ValidationError') {
+          res.status(400).send({ message: err.message });
+          return;
+        }
+        res.status(500).send({ message: 'Ошибка на сервере' });
+      }));
+};
 
-  User.create({ name, about, avatar })
-    .then((user) => res.status(201).send({ data: user }))
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        res.status(400).send({ message: err.message });
-        return;
+module.exports.login = (req, res) => {
+  const { email, password } = req.body;
+  User.findOne({ email })
+    .then((user) => {
+      if (!user) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-      res.status(500).send({ message: 'Ошибка на сервере' });
+      bcryptjs.compare(password, user.password);
+    })
+    .then((matched) => {
+      if (!matched) {
+        return Promise.reject(new Error('Неправильные почта или пароль'));
+      }
+      res.send('Все верно!');
+    })
+    .catch((err) => {
+      res.status(401).send({ message: err.message });
     });
 };
 
