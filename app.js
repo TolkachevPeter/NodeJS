@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const { PORT = 3000, BASE_PATH } = process.env;
 const usersRouter = require('./routes/users.js');
 const cardsRouter = require('./routes/cards.js');
+const {login, createUser} = require('./controllers/users');
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use((req, res, next) => {
 });
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
+app.post('/signin', login);
+app.post('/signup', createUser);
 
 app.listen(PORT, () => {
   console.log('Ссылка на сервер:');
