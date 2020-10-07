@@ -1,6 +1,6 @@
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
-
 
 module.exports.getAllUsers = (req, res) => {
   User.find({})
@@ -45,7 +45,8 @@ module.exports.login = (req, res) => {
       if (!matched) {
         return Promise.reject(new Error('Неправильные почта или пароль'));
       }
-      res.send('Все верно!');
+      const token = jwt.sign({ _id: user._id }, 'some-secret-key');
+      res.send({ token });
     })
     .catch((err) => {
       res.status(401).send({ message: err.message });
