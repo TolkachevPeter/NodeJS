@@ -15,17 +15,28 @@ module.exports.getAllUsers = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, about, avatar, email } = req.body;
   bcryptjs.hash(req.body.password, 10)
-    .then(hash => User.create({
+    .then((hash) => User.create({
       name,
       about,
       avatar,
       email,
       password: hash,
     })
-      .then((user) => res.status(201).send({ data: user }))
+      .then((user) => res.status(201).send({
+        data: {
+          name: user.name,
+          about: user.about,
+          avatar: user.avatar,
+          email: user.email,
+        },
+      }))
       .catch((err) => {
         if (err.name === 'ValidationError') {
           res.status(400).send({ message: err.message });
+          return;
+        }
+        if (err.name = MongoError) {
+          res.status(409).send({ message: 'Пользователь с таким e-mail уже существует' });
           return;
         }
         res.status(500).send({ message: 'Ошибка на сервере' });
