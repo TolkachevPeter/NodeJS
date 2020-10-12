@@ -35,7 +35,10 @@ module.exports.deleteCardById = (req, res) => {
       return Card.findOneAndRemove({ _id: req.params.id, owner: req.user._id })
         .orFail()
         .then((found) => {
-          res.status(200).send(found);
+          if (!found) {
+            return res.status(403).send({ message: 'Нет доступа к карточке' });
+          }
+          return res.status(200).send(found);
         });
     })
     .catch((err) => {
