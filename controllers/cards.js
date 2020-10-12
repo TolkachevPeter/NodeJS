@@ -27,10 +27,16 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCardById = (req, res) => {
-  Card.findOneAndRemove({ _id: req.params.id })
-    .orFail()
+  Card.findById(req.params.id)
     .then((card) => {
-      res.status(200).send(card);
+      if (!card) {
+        return res.status(404).json({ message: `Карточка c id=${req.params.id} не найдена` });
+      }
+      return Card.findOneAndRemove({ _id: req.params.id, owner: req.user._id })
+        .orFail()
+        .then((found) => {
+          res.status(200).send(found);
+        });
     })
     .catch((err) => {
       console.error('err = ', err.message);
