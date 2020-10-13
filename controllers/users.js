@@ -13,8 +13,20 @@ module.exports.getAllUsers = (req, res) => {
 };
 
 module.exports.createUser = (req, res) => {
-  const { name, about, avatar, email } = req.body;
-  bcryptjs.hash(req.body.password, 10)
+  const {
+    name,
+    about,
+    avatar,
+    email,
+    password,
+  } = req.body;
+  const regex = /\s/g;
+  if (regex.test(password)) {
+    res.status(400).send({ message: 'Пароль не может содержать пробелы' });
+  } else if (password.length < 8) {
+    res.status(400).send({ message: 'Пароль должен содержать более 8 символов' });
+  }
+  return bcryptjs.hash(req.body.password, 10)
     .then((hash) => User.create({
       name,
       about,
