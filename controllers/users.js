@@ -82,6 +82,8 @@ module.exports.getUser = (req, res) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
         res.status(404).json({ message: 'Пользлватель не найден' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       }
 
       res.status(500).json({ message: 'Ошибка на сервере' });
