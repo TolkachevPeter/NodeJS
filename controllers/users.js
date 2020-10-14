@@ -25,6 +25,8 @@ module.exports.createUser = (req, res) => {
     res.status(400).send({ message: 'Пароль не может содержать пробелы' });
   } else if (password.length < 8) {
     res.status(400).send({ message: 'Пароль должен содержать более 8 символов' });
+  } else if (!password) {
+    res.status(400).send({ message: 'Пароль обязателен для всех' });
   }
   return bcryptjs.hash(req.body.password, 10)
     .then((hash) => User.create({
