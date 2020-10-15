@@ -27,15 +27,23 @@ module.exports.createCard = (req, res) => {
 };
 
 module.exports.deleteCardById = (req, res) => {
-  Card.findOneAndRemove({ _id: req.params.id })
-    .orFail()
+  Card.findById(req.params.id)
     .then((card) => {
-      res.status(200).send(card);
+      if (!card) {
+        res.status(404).json({ message: `Карточка c id=${req.params.id} не найдена` });
+      } else if (card.owner._id.toString() !== req.user._id) {
+        res.status(403).send({ message: 'Нет доступа к карточке' });
+      }
+      return Card.findOneAndRemove({ _id: req.params.id, owner: req.user._id })
+        .orFail()
+        .then((found) => res.status(200).send(found));
     })
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
         res.status(404).json({ message: 'Карточка не найдена' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       }
 
       res.status(500).json({ message: 'Ошибка на сервере' });
@@ -56,6 +64,8 @@ module.exports.likeCard = (req, res) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
         res.status(404).json({ message: 'Карточка не найдена' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       }
 
       res.status(500).json({ message: 'Ошибка на сервере' });
@@ -76,6 +86,8 @@ module.exports.dislikeCard = (req, res) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
         res.status(404).json({ message: 'Карточка не найдена' });
+      } else if (err.name === 'CastError') {
+        res.status(400).send({ message: 'Переданы некорректные данные' });
       }
 
       res.status(500).json({ message: 'Ошибка на сервере' });
