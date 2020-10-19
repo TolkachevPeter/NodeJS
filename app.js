@@ -7,6 +7,7 @@ const usersRouter = require('./routes/users.js');
 const cardsRouter = require('./routes/cards.js');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
+const errorMain = require('./middlewares/error-main');
 
 const app = express();
 
@@ -26,6 +27,8 @@ app.use(auth);
 
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
+
+app.use(errorMain);
 
 app.listen(PORT, () => {
   console.log('Ссылка на сервер:');
