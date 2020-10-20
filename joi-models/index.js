@@ -1,40 +1,50 @@
-const { Joi } = require('celebrate');
-const { emailJoiModel } = require('./email-model');
-const { linkJoiModel } = require('./link-model');
-const { nameJoiModel } = require('./name-model');
-const { passwordJoiModel } = require('./password-model');
+const { Joi, celebrate } = require('celebrate');
+const { emailJoi } = require('./email-model');
+const { linkJoi } = require('./link-model');
+const { nameJoi } = require('./name-model');
+const { passwordJoi } = require('./password-model');
 
-const createUserJoiModel = Joi.object.keys({
-  name: nameJoiModel,
-  about: nameJoiModel,
-  avatar: linkJoiModel,
-  email: emailJoiModel,
-  password: passwordJoiModel,
+const createUserJoiModel = celebrate({
+  body: Joi.object().keys({
+    name: nameJoi,
+    about: nameJoi,
+    avatar: linkJoi,
+    email: emailJoi,
+    password: passwordJoi,
+  }),
 });
 
-const loginJoiModel = Joi.object.keys({
-  email: emailJoiModel,
-  password: passwordJoiModel,
+const loginJoiModel = celebrate({
+  body: Joi.object().keys({
+    email: emailJoi,
+    password: passwordJoi,
+  }),
 });
 
-const avatarJoiModel = Joi.object.keys({
-  avatar: linkJoiModel,
+const avatarJoiModel = celebrate({
+  body: Joi.object().keys({
+    avatar: linkJoi,
+  }),
 });
 
-const cardJoiModel = Joi.object.keys({
-  name: nameJoiModel,
-  link: linkJoiModel,
+const cardJoiModel = celebrate({
+  body: Joi.object().keys({
+    name: nameJoi,
+    link: linkJoi,
+  }),
 });
 
-const infoJoiModel = Joi.object.keys({
-  name: nameJoiModel,
-  about: nameJoiModel,
+const infoJoiModel = celebrate({
+  body: Joi.object().keys({
+    name: nameJoi,
+    about: nameJoi,
+  }),
 });
 
 module.exports = {
-  createUserJoiModel,
-  loginJoiModel,
-  avatarJoiModel,
   cardJoiModel,
   infoJoiModel,
+  avatarJoiModel,
+  loginJoiModel,
+  createUserJoiModel,
 };

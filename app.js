@@ -4,12 +4,11 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 
 const { PORT = 3000, BASE_PATH } = process.env;
-const { errors, celebrate } = require('celebrate');
+const { errors } = require('celebrate');
 const usersRouter = require('./routes/users.js');
 const cardsRouter = require('./routes/cards.js');
 const { login, createUser } = require('./controllers/users');
 const auth = require('./middlewares/auth');
-const errorMain = require('./middlewares/error-main');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const {
   createUserJoiModel,
@@ -35,14 +34,10 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signin', celebrate({
-  body: loginJoiModel,
-}), login);
-app.post('/signup', celebrate({
-  body: createUserJoiModel,
-}), createUser);
+app.post('/signin', loginJoiModel, login);
+app.post('/signup', createUserJoiModel, createUser);
 
-app.use(auth);
+// app.use(auth);
 
 app.use('/', usersRouter);
 app.use('/', cardsRouter);
@@ -51,7 +46,9 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use(errorMain);
+app.use((err, req, res, next) => {
+  res.status(err.statusCode).send({ message: err.message });
+});
 
 app.listen(PORT, () => {
   console.log('Ссылка на сервер:');

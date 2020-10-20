@@ -1,3 +1,3 @@
 const { Joi } = require('celebrate');
 
-module.exports.emailJoiModel = Joi.string().required().email();
+module.exports.emailJoi = Joi.string().required().email();

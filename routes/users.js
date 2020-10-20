@@ -1,5 +1,4 @@
 const usersRouter = require('express').Router();
-const { celebrate } = require('celebrate');
 const {
   getAllUsers,
   getUser,
@@ -7,18 +6,14 @@ const {
   patchUserAvatar,
 } = require('../controllers/users');
 const {
-  avatarJoiModel,
   infoJoiModel,
-} = require('../joi-models/index');
+  avatarJoiModel
+} = require('../joi-models/index.js');
 const auth = require('../middlewares/auth');
 
 usersRouter.get('/users', getAllUsers);
 usersRouter.get('/users/:id', getUser);
-usersRouter.patch('/users/me', celebrate({
-  body: infoJoiModel,
-}), auth, patchUser);
-usersRouter.patch('/users/me/avatar', celebrate({
-  body: avatarJoiModel,
-}), auth, patchUserAvatar);
+usersRouter.patch('/users/me', infoJoiModel, auth, patchUser);
+usersRouter.patch('/users/me/avatar', avatarJoiModel, auth, patchUserAvatar);
 
 module.exports = usersRouter;
