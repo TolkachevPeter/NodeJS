@@ -7,7 +7,7 @@ const {
 } = require('../controllers/users');
 const {
   infoJoiModel,
-  avatarJoiModel
+  avatarJoiModel,
 } = require('../joi-models/index.js');
 const auth = require('../middlewares/auth');
 

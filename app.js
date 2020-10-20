@@ -37,7 +37,7 @@ app.get('/crash-test', () => {
 app.post('/signin', loginJoiModel, login);
 app.post('/signup', createUserJoiModel, createUser);
 
-// app.use(auth);
+app.use(auth);
 
 app.use('/', usersRouter);
 app.use('/', cardsRouter);

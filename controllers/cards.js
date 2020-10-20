@@ -25,9 +25,9 @@ module.exports.deleteCardById = (req, res, next) => {
   Card.findById(req.params.id)
     .then((card) => {
       if (!card) {
-        throw new NotFoundError({ message: `Карточка c id=${req.params.id} не найдена` });
+        throw new NotFoundError(`Карточка c id=${req.params.id} не найдена`);
       } else if (card.owner._id.toString() !== req.user._id) {
-        throw new UnauthorizedError({ message: 'Нет доступа к карточке' });
+        throw new UnauthorizedError('Нет доступа к карточке');
       }
       return Card.findOneAndRemove({ _id: req.params.id, owner: req.user._id })
         .orFail()
@@ -36,12 +36,12 @@ module.exports.deleteCardById = (req, res, next) => {
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError({ message: 'Карточка не найдена' });
+        const e = new NotFoundError('Карточка не найдена');
+        next(e);
       } else if (err.name === 'CastError') {
-        throw new BadRequestError({ message: 'Переданы некорректные данные' });
-      }
-
-      next(err);
+        const e = new BadRequestError('Переданы некорректные данные');
+        next(e);
+      } else next(err);
     });
 };
 
@@ -58,12 +58,12 @@ module.exports.likeCard = (req, res, next) => {
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError({ message: 'Карточка не найдена' });
+        const e = new NotFoundError('Карточка не найдена');
+        next(e);
       } else if (err.name === 'CastError') {
-        throw new BadRequestError({ message: 'Переданы некорректные данные' });
-      }
-
-      next(err);
+        const e = new BadRequestError('Переданы некорректные данные');
+        next(e);
+      } else next(err);
     });
 };
 
@@ -80,11 +80,11 @@ module.exports.dislikeCard = (req, res, next) => {
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        throw new NotFoundError({ message: 'Карточка не найдена' });
+        const e = new NotFoundError('Карточка не найдена');
+        next(e);
       } else if (err.name === 'CastError') {
-        throw new BadRequestError({ message: 'Переданы некорректные данные' });
-      }
-
-      next(err);
+        const e = new BadRequestError('Переданы некорректные данные');
+        next(e);
+      } else next(err);
     });
 };
