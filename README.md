@@ -60,3 +60,5 @@ npm run dev
 `curl -i -X POST -H "Content-Type: application/json" -d '{"email": "peter.tolkachev@gmail.com", "password": "qwerty12345", "name": "Толкачев Петр", "about": "Phd", "avatar": "https://avatars1.githubusercontent.com/u/52109421?s=460&u=8453ad74db7403216ad857a9d8ac53b6109d19ce&v=4"}' http://localhost:3000/signup`
 
 ##### Пример ответа
+
+Надо все дописать)
