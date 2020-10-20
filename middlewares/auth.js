@@ -18,10 +18,11 @@ module.exports = (req, res, next) => {
 
   const token = extractBearerToken(authorization);
   let payload;
-  const { JWT_SECRET = 'dev-key' } = process.env;
+  const { NODE_ENV, JWT_SECRET } = process.env;
 
   try {
-    payload = jwt.verify(token, JWT_SECRET);
+    payload = jwt.verify(token,
+      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
   } catch (err) {
     return handleAuthError(res);
   }
