@@ -18,7 +18,7 @@ cardsRouter.delete('/cards/:id', auth, deleteCardById);
 cardsRouter.put('/cards/:id/likes', likeCard);
 cardsRouter.delete('/cards/:id/likes', dislikeCard);
 
-cardsRouter.get('*', () => {
+cardsRouter.all('*', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
 
