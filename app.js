@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 
-const { PORT = 3000, BASE_PATH } = process.env;
+const { PORT = 3000 } = process.env;
 const { errors } = require('celebrate');
 const usersRouter = require('./routes/users.js');
 const cardsRouter = require('./routes/cards.js');
@@ -51,6 +51,5 @@ app.use((err, req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log('Ссылка на сервер:');
-  console.log(BASE_PATH);
+  console.log(`Сервер доступен по этому порту: ${PORT}`);
 });

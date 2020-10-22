@@ -7,6 +7,8 @@ const {
   UnauthorizedError,
 } = require('../errors');
 
+const { passwordModel } = require('../joi-models/index');
+
 module.exports.getAllUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
@@ -23,13 +25,12 @@ module.exports.createUser = (req, res, next) => {
     email,
     password,
   } = req.body;
-  const regex = /\s/g;
-  if (regex.test(password)) {
-    throw new BadRequestError('Пароль не может содержать пробелы');
-  } else if (password.length < 8) {
+  if (password.length < 8) {
     throw new BadRequestError('Пароль должен содержать более 8 символов');
   } else if (!password) {
     throw new BadRequestError('Пароль обязателен для всех');
+  } else if (!passwordModel) {
+    throw new BadRequestError('Пароль должен содержать латиницу и арабские цифры');
   }
   return bcryptjs.hash(req.body.password, 10)
     .then((hash) => User.create({

@@ -41,10 +41,17 @@ const infoJoiModel = celebrate({
   }),
 });
 
+const passwordModel = celebrate({
+  body: Joi.object().keys({
+    password: passwordJoi,
+  }),
+});
+
 module.exports = {
   cardJoiModel,
   infoJoiModel,
   avatarJoiModel,
   loginJoiModel,
   createUserJoiModel,
+  passwordModel,
 };

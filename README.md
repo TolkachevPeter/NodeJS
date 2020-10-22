@@ -1,11 +1,11 @@
-# backend-mesto v0.0.5
+# backend-mesto v0.0.15
 
 ## API для проекта Mesto 
 
 
 ## Демо
 
-К api можно обратиться по адресу `tolkachev.site/api/`, `www.tolkachev.site/api/` или по ip `84.201.176.201`
+К api можно обратиться по адресу `www.api.tolkachev.site/` или по ip `84.201.176.201`
 
 ## Установка
 
