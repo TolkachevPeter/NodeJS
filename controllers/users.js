@@ -32,7 +32,7 @@ module.exports.createUser = (req, res, next) => {
   } else if (!passwordModel) {
     throw new BadRequestError('Пароль должен содержать латиницу и арабские цифры');
   }
-  return bcryptjs.hash(req.body.password, 10)
+  return bcryptjs.hash(password, 10)
     .then((hash) => User.create({
       name,
       about,
@@ -84,7 +84,7 @@ module.exports.getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        const e = new NotFoundError('Пользлватель не найден');
+        const e = new NotFoundError('Пользователь не найден');
         next(e);
       } else if (err.name === 'CastError') {
         const e = new BadRequestError('Переданы некорректные данные');
