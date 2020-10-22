@@ -108,7 +108,8 @@ module.exports.patchUser = (req, res, next) => {
 
 module.exports.patchUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  const opts = { runValidators: true };
+  User.findByIdAndUpdate(req.user._id, { avatar }, opts, { new: true })
     .then((user) => {
       res.status(200).send(user);
     })
