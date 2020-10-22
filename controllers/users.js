@@ -51,7 +51,7 @@ module.exports.createUser = (req, res, next) => {
         if (err.name === 'ValidationError') {
           const e = new BadRequestError(err.message);
           next(e);
-        } else if (err.code === 11000) {
+        } else if (err.code === 11000 && err.name === 'MongoError') {
           res.status(409).send({ message: 'Пользователь с таким e-mail уже существует' });
         } else next(err);
       }));
