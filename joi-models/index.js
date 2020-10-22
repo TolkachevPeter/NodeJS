@@ -3,6 +3,7 @@ const { emailJoi } = require('./email-model');
 const { linkJoi } = require('./link-model');
 const { nameJoi } = require('./name-model');
 const { passwordJoi } = require('./password-model');
+const { objectJoi } = require('./object-id-model');
 
 const createUserJoiModel = celebrate({
   body: Joi.object().keys({
@@ -47,6 +48,12 @@ const passwordModel = celebrate({
   }),
 });
 
+const objectIdModel = celebrate({
+  params: Joi.object().keys({
+    id: objectJoi,
+  }),
+});
+
 module.exports = {
   cardJoiModel,
   infoJoiModel,
@@ -54,4 +61,5 @@ module.exports = {
   loginJoiModel,
   createUserJoiModel,
   passwordModel,
+  objectIdModel,
 };
