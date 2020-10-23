@@ -1,6 +1,6 @@
 const { Joi } = require('celebrate');
 
 module.exports.nameJoi = Joi.string()
-  .min(3)
+  .min(2)
   .max(30)
   .required();
