@@ -51,11 +51,9 @@ module.exports.createUser = (req, res, next) => {
       }))
       .catch((err) => {
         if (err.name === 'ValidationError') {
-          const e = new BadRequestError(err.message);
-          next(e);
+          next(new BadRequestError(err.message));
         } else if (err.code === 11000 && err.name === 'MongoError') {
-          const e = new ConflictError('Пользователь с таким e-mail уже существует');
-          next(e);
+          next(new ConflictError('Пользователь с таким e-mail уже существует'));
         } else next(err);
       }));
 };
@@ -86,11 +84,9 @@ module.exports.getUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'DocumentNotFoundError') {
-        const e = new NotFoundError('Пользователь не найден');
-        next(e);
+        next(new NotFoundError('Пользователь не найден'));
       } else if (err.name === 'CastError') {
-        const e = new BadRequestError('Переданы некорректные данные');
-        next(e);
+        next(new BadRequestError('Переданы некорректные данные'));
       } else next(err);
     });
 };
@@ -103,8 +99,7 @@ module.exports.patchUser = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        const e = new BadRequestError(err.message);
-        next(e);
+        next(new BadRequestError(err.message));
       } else next(err);
     });
 };
@@ -118,8 +113,7 @@ module.exports.patchUserAvatar = (req, res, next) => {
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        const e = new BadRequestError(err.message);
-        next(e);
+        next(new BadRequestError(err.message));
       } else next(err);
     });
 };

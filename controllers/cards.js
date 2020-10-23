@@ -20,8 +20,7 @@ module.exports.createCard = (req, res, next) => {
     .then((card) => res.status(201).send({ data: card }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        const e = new BadRequestError('Переданы некорректные данные');
-        next(e);
+        next(new BadRequestError('Переданы некорректные данные'));
       } else next(err);
     });
 };
@@ -40,11 +39,9 @@ module.exports.deleteCardById = (req, res, next) => {
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        const e = new NotFoundError('Карточка не найдена');
-        next(e);
+        next(new NotFoundError('Карточка не найдена'));
       } else if (err.name === 'CastError') {
-        const e = new BadRequestError('Переданы некорректные данные');
-        next(e);
+        next(new BadRequestError('Переданы некорректные данные'));
       } else next(err);
     });
 };
@@ -62,11 +59,9 @@ module.exports.likeCard = (req, res, next) => {
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        const e = new NotFoundError('Карточка не найдена');
-        next(e);
+        next(new NotFoundError('Карточка не найдена'));
       } else if (err.name === 'CastError') {
-        const e = new BadRequestError('Переданы некорректные данные');
-        next(e);
+        next(new BadRequestError('Переданы некорректные данные'));
       } else next(err);
     });
 };
@@ -84,11 +79,9 @@ module.exports.dislikeCard = (req, res, next) => {
     .catch((err) => {
       console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        const e = new NotFoundError('Карточка не найдена');
-        next(e);
+        next(new NotFoundError('Карточка не найдена'));
       } else if (err.name === 'CastError') {
-        const e = new BadRequestError('Переданы некорректные данные');
-        next(e);
+        next(new BadRequestError('Переданы некорректные данные'));
       } else next(err);
     });
 };
