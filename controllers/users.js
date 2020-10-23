@@ -5,6 +5,7 @@ const {
   BadRequestError,
   NotFoundError,
   UnauthorizedError,
+  ConflictError,
 } = require('../errors');
 
 const { passwordModel } = require('../joi-models/index');
@@ -53,7 +54,8 @@ module.exports.createUser = (req, res, next) => {
           const e = new BadRequestError(err.message);
           next(e);
         } else if (err.code === 11000 && err.name === 'MongoError') {
-          res.status(409).send({ message: 'Пользователь с таким e-mail уже существует' });
+          const e = new ConflictError('Пользователь с таким e-mail уже существует');
+          next(e);
         } else next(err);
       }));
 };
