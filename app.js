@@ -62,5 +62,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Сервер доступен по этому порту: ${PORT}`);
+  console.log(`Сервер доступен по этому порту: http://localhost:${PORT}`);
 });
