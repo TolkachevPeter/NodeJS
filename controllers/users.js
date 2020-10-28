@@ -1,18 +1,24 @@
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/user');
+const {
+  BadRequestError,
+  NotFoundError,
+  UnauthorizedError,
+  ConflictError,
+} = require('../errors');
 
-module.exports.getAllUsers = (req, res) => {
+const { passwordModel } = require('../joi-models/index');
+
+module.exports.getAllUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
       res.status(200).send({ data: users });
     })
-    .catch((err) => {
-      res.status(500).send({ message: err.message });
-    });
+    .catch(next);
 };
 
-module.exports.createUser = (req, res) => {
+module.exports.createUser = (req, res, next) => {
   const {
     name,
     about,
@@ -20,15 +26,14 @@ module.exports.createUser = (req, res) => {
     email,
     password,
   } = req.body;
-  const regex = /\s/g;
-  if (regex.test(password)) {
-    res.status(400).send({ message: 'Пароль не может содержать пробелы' });
-  } else if (password.length < 8) {
-    res.status(400).send({ message: 'Пароль должен содержать более 8 символов' });
+  if (password.length < 8) {
+    throw new BadRequestError('Пароль должен содержать более 8 символов');
   } else if (!password) {
-    res.status(400).send({ message: 'Пароль обязателен для всех' });
+    throw new BadRequestError('Пароль обязателен для всех');
+  } else if (!passwordModel) {
+    throw new BadRequestError('Пароль должен содержать латиницу и арабские цифры');
   }
-  return bcryptjs.hash(req.body.password, 10)
+  return bcryptjs.hash(password, 10)
     .then((hash) => User.create({
       name,
       about,
@@ -46,77 +51,68 @@ module.exports.createUser = (req, res) => {
       }))
       .catch((err) => {
         if (err.name === 'ValidationError') {
-          res.status(400).send({ message: err.message });
-        } else if (err.code === 11000) {
-          res.status(409).send({ message: 'Пользователь с таким e-mail уже существует' });
-          return;
-        }
-        res.status(500).send({ message: 'Ошибка на сервере' });
+          next(new BadRequestError(err.message));
+        } else if (err.code === 11000 && err.name === 'MongoError') {
+          next(new ConflictError('Пользователь с таким e-mail уже существует'));
+        } else next(err);
       }));
 };
 
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
-      const { JWT_SECRET = 'dev-key' } = process.env;
+      const { NODE_ENV, JWT_SECRET } = process.env;
       const token = jwt.sign(
         { _id: user._id },
-        JWT_SECRET,
+        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
         { expiresIn: '7d' },
       );
       res.send({ token });
     })
     .catch((err) => {
-      res.status(401).send({ message: err.message });
+      next(new UnauthorizedError(err.message));
     });
 };
 
-module.exports.getUser = (req, res) => {
+module.exports.getUser = (req, res, next) => {
   User.findById(req.params.id)
     .orFail()
     .then((user) => {
       res.status(200).send(user);
     })
     .catch((err) => {
-      console.error('err = ', err.message);
       if (err.name === 'DocumentNotFoundError') {
-        res.status(404).json({ message: 'Пользлватель не найден' });
+        next(new NotFoundError('Пользователь не найден'));
       } else if (err.name === 'CastError') {
-        res.status(400).send({ message: 'Переданы некорректные данные' });
-      }
-
-      res.status(500).json({ message: 'Ошибка на сервере' });
+        next(new BadRequestError('Переданы некорректные данные'));
+      } else next(err);
     });
 };
 
-module.exports.patchUser = (req, res) => {
+module.exports.patchUser = (req, res, next) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: err.message });
-        return;
-      }
-      res.status(500).send({ message: 'Ошибка на сервере' });
+        next(new BadRequestError(err.message));
+      } else next(err);
     });
 };
 
-module.exports.patchUserAvatar = (req, res) => {
+module.exports.patchUserAvatar = (req, res, next) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
+  User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       res.status(200).send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        res.status(400).send({ message: err.message });
-        return;
-      }
-      res.status(500).send({ message: 'Ошибка на сервере' });
+        next(new BadRequestError(err.message));
+      } else next(err);
     });
 };
