@@ -1,9 +1,13 @@
-# backend-mesto v0.0.15
+# backend-mesto v0.0.16
+
+В версии 0.0.16 добавлен TypeScript и Docker.
 
 ## API для проекта Mesto 
 
 
 ## Демо
+
+На данный момент демо доступно только для развертывания локально!
 
 К api можно обратиться по адресу `www.api.tolkachev.site/` или по ip `84.201.176.201`
 
@@ -30,7 +34,7 @@ npm install
 ### Запуск сервера:
 
 ```
-npm run start
+npm run build && npm run start
 ```
 
 ### Запуск сервера с хот релоудом:

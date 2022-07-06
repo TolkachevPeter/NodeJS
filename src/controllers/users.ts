@@ -1,16 +1,14 @@
-const bcryptjs = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const User = require('../models/user');
-const {
-  BadRequestError,
-  NotFoundError,
-  UnauthorizedError,
-  ConflictError,
-} = require('../errors');
+import bcryptjs from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import User from '../models/user';
+import {
+  BadRequestError, NotFoundError, UnauthorizedError, ConflictError,
+} from '../errors';
 
-const { passwordModel } = require('../joi-models/index');
+import { passwordModel } from '../joi-models/index';
 
-module.exports.getAllUsers = (req, res, next) => {
+export const getAllUsers = (req:Request, res: Response, next: NextFunction): void => {
   User.find({})
     .then((users) => {
       res.status(200).send({ data: users });
@@ -18,7 +16,7 @@ module.exports.getAllUsers = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.createUser = (req, res, next) => {
+export const createUser = (req:Request, res: Response, next: NextFunction) => {
   const {
     name,
     about,
@@ -41,7 +39,7 @@ module.exports.createUser = (req, res, next) => {
       email,
       password: hash,
     })
-      .then((user) => res.status(201).send({
+      .then((user: any) => res.status(201).send({
         data: {
           name: user.name,
           about: user.about,
@@ -58,10 +56,10 @@ module.exports.createUser = (req, res, next) => {
       }));
 };
 
-module.exports.login = (req, res, next) => {
+export const login = (req:Request, res: Response, next: NextFunction): void => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  return (User as any).findUserByCredentials(email, password)
     .then((user) => {
       const { NODE_ENV, JWT_SECRET } = process.env;
       const token = jwt.sign(
@@ -76,7 +74,7 @@ module.exports.login = (req, res, next) => {
     });
 };
 
-module.exports.getUser = (req, res, next) => {
+export const getUser = (req:Request, res: Response, next: NextFunction): void => {
   User.findById(req.params.id)
     .orFail()
     .then((user) => {
@@ -91,7 +89,7 @@ module.exports.getUser = (req, res, next) => {
     });
 };
 
-module.exports.patchUser = (req, res, next) => {
+export const patchUser = (req:Request, res: Response, next: NextFunction): void => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
@@ -104,7 +102,7 @@ module.exports.patchUser = (req, res, next) => {
     });
 };
 
-module.exports.patchUserAvatar = (req, res, next) => {
+export const patchUserAvatar = (req:Request, res: Response, next: NextFunction): void => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {

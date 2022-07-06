@@ -1,10 +1,11 @@
 /* eslint-disable consistent-return */
-const jwt = require('jsonwebtoken');
-const { UnauthorizedError } = require('../errors/index');
+import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
+import { UnauthorizedError } from '../errors/index';
 
 const extractBearerToken = (header) => header.replace('Bearer ', '');
 
-module.exports = (req, res, next) => {
+export default (req:Request, res: Response, next: NextFunction) => {
   const { authorization } = req.headers;
 
   if (!authorization || !authorization.startsWith('Bearer ')) {

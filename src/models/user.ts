@@ -1,7 +1,7 @@
-const mongoose = require('mongoose');
-const bcryptjs = require('bcryptjs');
-const validate = require('validator');
-const isEmail = require('validator/lib/isEmail');
+import mongoose from 'mongoose';
+import bcryptjs from 'bcryptjs';
+import validate from 'validator';
+import isEmail from 'validator/lib/isEmail';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -56,5 +56,4 @@ userSchema.statics.findUserByCredentials = function (email, password) {
         });
     });
 };
-
-module.exports = mongoose.model('user', userSchema);
+export default mongoose.model('user', userSchema);

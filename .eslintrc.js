@@ -4,8 +4,11 @@ module.exports = {
     commonjs: true,
     es2021: true,
   },
+  plugins: [
+    '@typescript-eslint',
+  ],
   extends: [
-    'airbnb-base',
+    'plugin:@typescript-eslint/recommended',
   ],
   parserOptions: {
     ecmaVersion: 12,

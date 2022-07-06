@@ -1,0 +1,25 @@
+version: '3.7'
+services:
+  node-js:
+    container_name: node-js
+    env_file:
+      - .env
+    build:
+      context: "."
+    image: node-js:1
+    restart: unless-stopped
+    # example
+    networks:
+      local:
+        ipv4_address: 100.100.10.10
+    extra_hosts:
+      - "mongodb:200.200.20.20"
+    logging:
+        driver: "json-file"
+        options:
+            max-file: "7"
+            max-size: "20m"
+networks:
+  local:
+    external:
+      name: local
