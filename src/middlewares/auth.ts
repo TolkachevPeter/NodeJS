@@ -1,8 +1,7 @@
 /* eslint-disable consistent-return */
 import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 import { UnauthorizedError } from '../errors/index';
-import {Request, Response, NextFunction} from 'express';
-
 
 const extractBearerToken = (header) => header.replace('Bearer ', '');
 

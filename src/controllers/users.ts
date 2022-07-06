@@ -1,12 +1,14 @@
 import bcryptjs from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { Request, Response, NextFunction } from 'express';
 import User from '../models/user';
-import { BadRequestError, NotFoundError, UnauthorizedError, ConflictError } from '../errors';
-import {Request, Response, NextFunction} from 'express';
+import {
+  BadRequestError, NotFoundError, UnauthorizedError, ConflictError,
+} from '../errors';
 
 import { passwordModel } from '../joi-models/index';
 
-export const getAllUsers  = (req:Request, res: Response, next: NextFunction): void => {
+export const getAllUsers = (req:Request, res: Response, next: NextFunction): void => {
   User.find({})
     .then((users) => {
       res.status(200).send({ data: users });
@@ -14,7 +16,7 @@ export const getAllUsers  = (req:Request, res: Response, next: NextFunction): vo
     .catch(next);
 };
 
-export const createUser  = (req:Request, res: Response, next: NextFunction): void => {
+export const createUser = (req:Request, res: Response, next: NextFunction) => {
   const {
     name,
     about,
@@ -37,7 +39,7 @@ export const createUser  = (req:Request, res: Response, next: NextFunction): voi
       email,
       password: hash,
     })
-      .then((user) => res.status(201).send({
+      .then((user: any) => res.status(201).send({
         data: {
           name: user.name,
           about: user.about,
@@ -54,10 +56,10 @@ export const createUser  = (req:Request, res: Response, next: NextFunction): voi
       }));
 };
 
-export const login  = (req:Request, res: Response, next: NextFunction): void => {
+export const login = (req:Request, res: Response, next: NextFunction): void => {
   const { email, password } = req.body;
 
-  return User.findUserByCredentials(email, password)
+  return (User as any).findUserByCredentials(email, password)
     .then((user) => {
       const { NODE_ENV, JWT_SECRET } = process.env;
       const token = jwt.sign(
@@ -72,7 +74,7 @@ export const login  = (req:Request, res: Response, next: NextFunction): void => 
     });
 };
 
-export const getUser  = (req:Request, res: Response, next: NextFunction): void => {
+export const getUser = (req:Request, res: Response, next: NextFunction): void => {
   User.findById(req.params.id)
     .orFail()
     .then((user) => {
@@ -87,7 +89,7 @@ export const getUser  = (req:Request, res: Response, next: NextFunction): void =
     });
 };
 
-export const patchUser  = (req:Request, res: Response, next: NextFunction): void => {
+export const patchUser = (req:Request, res: Response, next: NextFunction): void => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
@@ -100,7 +102,7 @@ export const patchUser  = (req:Request, res: Response, next: NextFunction): void
     });
 };
 
-export const patchUserAvatar  = (req:Request, res: Response, next: NextFunction): void => {
+export const patchUserAvatar = (req:Request, res: Response, next: NextFunction): void => {
   const { avatar } = req.body;
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true, runValidators: true })
     .then((user) => {

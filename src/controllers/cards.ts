@@ -1,6 +1,6 @@
+import { Request, Response, NextFunction } from 'express';
 import Card from '../models/card';
 import { BadRequestError, NotFoundError, UnauthorizedError } from '../errors';
-import {Request, Response, NextFunction} from 'express';
 
 export const getAllCards = (req:Request, res: Response, next: NextFunction): void => {
   Card.find({})
@@ -22,7 +22,7 @@ export const createCard = (req:Request, res: Response, next: NextFunction): void
     });
 };
 
-export const deleteCardById= (req:Request, res: Response, next: NextFunction): void => {
+export const deleteCardById = (req:Request, res: Response, next: NextFunction): void => {
   Card.findById(req.params.id)
     .then((card) => {
       if (!card) {

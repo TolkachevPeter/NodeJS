@@ -5,13 +5,9 @@ module.exports = {
     es2021: true,
   },
   plugins: [
-		'promise',
-		'no-unsafe-regex',
-		'new-with-error',
-		'@typescript-eslint',
-	],
+    '@typescript-eslint',
+  ],
   extends: [
-    'airbnb-base',
     'plugin:@typescript-eslint/recommended',
   ],
   parserOptions: {

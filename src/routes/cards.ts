@@ -1,16 +1,10 @@
-const cardsRouter = require('express').Router();
-const {
-  getAllCards,
-  createCard,
-  deleteCardById,
-  likeCard,
-  dislikeCard,
-} = require('../controllers/cards');
-const {
-  NotFoundError,
-} = require('../errors');
-const { cardJoiModel, objectIdModel } = require('../joi-models/index');
-const auth = require('../middlewares/auth');
+import express from 'express';
+import { getAllCards, createCard, deleteCardById, likeCard, dislikeCard } from '../controllers/cards';
+import { NotFoundError } from '../errors';
+import { cardJoiModel, objectIdModel } from '../joi-models/index';
+import auth from '../middlewares/auth';
+const cardsRouter = express.Router();
+
 
 cardsRouter.get('/cards', getAllCards);
 cardsRouter.post('/cards', cardJoiModel, createCard);

@@ -1,18 +1,18 @@
-import express, {Request, Response, NextFunction} from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 
 import { errors } from 'celebrate';
-import usersRouter from './routes/users.js';
-import cardsRouter from './routes/cards.js';
+import usersRouter from './routes/users';
+import cardsRouter from './routes/cards';
 import { login, createUser } from './controllers/users';
 import auth from './middlewares/auth';
 import { requestLogger, errorLogger } from './middlewares/logger';
-import { createUserJoiModel, loginJoiModel } from './joi-models/index';
+import { createUserJoiModel, loginJoiModel } from './joi-models';
+
 require('dotenv').config();
+
 const { PORT = 3000 } = process.env;
-
-
 
 const app = express();
 

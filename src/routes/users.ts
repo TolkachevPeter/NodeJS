@@ -1,16 +1,9 @@
-const usersRouter = require('express').Router();
-const {
-  getAllUsers,
-  getUser,
-  patchUser,
-  patchUserAvatar,
-} = require('../controllers/users');
-const {
-  infoJoiModel,
-  avatarJoiModel,
-  objectIdModel,
-} = require('../joi-models/index.js');
-const auth = require('../middlewares/auth');
+import express from 'express';
+import { getAllUsers, getUser, patchUser, patchUserAvatar } from '../controllers/users';
+import { infoJoiModel, avatarJoiModel, objectIdModel } from '../joi-models/index';
+import auth from '../middlewares/auth';
+const usersRouter = express.Router();
+
 
 usersRouter.get('/users', getAllUsers);
 usersRouter.get('/users/:id', objectIdModel, getUser);

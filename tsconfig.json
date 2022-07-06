@@ -1,6 +1,13 @@
 { 
   "include": ["src/**/*"],
   "exclude": ["migrations", "node_modules", "dist"],
+  "ts-node": {
+    "files": true
+  },
+  "files": [
+    "./src/types/global.d.ts",
+    "./src/types/types.d.ts"
+  ],
   "compilerOptions": {
     /* Visit https://aka.ms/tsconfig to read more about this file */
 
