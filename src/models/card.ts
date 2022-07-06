@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
-const validate = require('validator');
+import mongoose from 'mongoose';
+import validate from 'validator';
 
 const cardSchema = new mongoose.Schema({
   name: {
@@ -34,4 +34,4 @@ const cardSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('card', cardSchema);
+export default mongoose.model('card', cardSchema);

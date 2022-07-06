@@ -1,19 +1,18 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
-require('dotenv').config();
+import express, {Request, Response, NextFunction} from 'express';
+import mongoose from 'mongoose';
+import bodyParser from 'body-parser';
 
+import { errors } from 'celebrate';
+import usersRouter from './routes/users.js';
+import cardsRouter from './routes/cards.js';
+import { login, createUser } from './controllers/users';
+import auth from './middlewares/auth';
+import { requestLogger, errorLogger } from './middlewares/logger';
+import { createUserJoiModel, loginJoiModel } from './joi-models/index';
+require('dotenv').config();
 const { PORT = 3000 } = process.env;
-const { errors } = require('celebrate');
-const usersRouter = require('./routes/users.js');
-const cardsRouter = require('./routes/cards.js');
-const { login, createUser } = require('./controllers/users');
-const auth = require('./middlewares/auth');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
-const {
-  createUserJoiModel,
-  loginJoiModel,
-} = require('./joi-models/index');
+
+
 
 const app = express();
 
@@ -47,7 +46,7 @@ app.use(errorLogger);
 app.use(errors());
 
 // eslint-disable-next-line no-unused-vars
-app.use((err, req, res, next) => {
+app.use((err, req:Request, res: Response, next: NextFunction) => {
   // если у ошибки нет статуса, выставляем 500
   const { statusCode = 500, message } = err;
 

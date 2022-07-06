@@ -1,9 +1,9 @@
-const { Joi, celebrate } = require('celebrate');
-const { emailJoi } = require('./email-model');
-const { linkJoi } = require('./link-model');
-const { nameJoi } = require('./name-model');
-const { passwordJoi } = require('./password-model');
-const { objectJoi } = require('./object-id-model');
+import { Joi, celebrate } from 'celebrate';
+import { emailJoi } from './email-model';
+import { linkJoi } from './link-model';
+import { nameJoi } from './name-model';
+import { passwordJoi } from './password-model';
+import { objectJoi } from './object-id-model';
 
 const createUserJoiModel = celebrate({
   body: Joi.object().keys({
@@ -54,7 +54,7 @@ const objectIdModel = celebrate({
   }),
 });
 
-module.exports = {
+export {
   cardJoiModel,
   infoJoiModel,
   avatarJoiModel,

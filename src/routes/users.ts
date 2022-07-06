@@ -17,4 +17,4 @@ usersRouter.get('/users/:id', objectIdModel, getUser);
 usersRouter.patch('/users/me', infoJoiModel, auth, patchUser);
 usersRouter.patch('/users/me/avatar', avatarJoiModel, auth, patchUserAvatar);
 
-module.exports = usersRouter;
+export default usersRouter;

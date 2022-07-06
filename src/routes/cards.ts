@@ -22,4 +22,4 @@ cardsRouter.all('*', () => {
   throw new NotFoundError('Запрашиваемый ресурс не найден');
 });
 
-module.exports = cardsRouter;
+export default cardsRouter;
